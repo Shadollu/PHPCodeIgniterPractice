@@ -5,6 +5,8 @@ Class Pay2GoInvoice extends CI_Controller
 
     //HashKey = BvaotUvHl1a0FoXSxe6u17S5yal1mVqO
     //HashIV = r5N3p2Yjnw7UuEes
+    //A = 07628153,Allenlu,I + 44
+
 
     public function index()
     {
@@ -15,7 +17,7 @@ Class Pay2GoInvoice extends CI_Controller
             "Version" => '1.4',
             "TimeStamp" => time(),
             //"TransNum",
-            "MerchantOrderNo" => 'M0001',
+            "MerchantOrderNo" => 'M0003',
             "Status" => '1',
             //CreateStatusTime,
             "Category" => 'B2C',
@@ -36,13 +38,13 @@ Class Pay2GoInvoice extends CI_Controller
             //AmtFree,
             "TaxAmt" => 10,
             "TotalAmt" => 500,
-            "ItemName" => 'TESTITEM1',
+            "ItemName" => 'TESTITEM3',
             "ItemCount" => 1,
             "ItemUnit" => 'piece',
             "ItemPrice" => 500,
             "ItemAmt" => 500,
             "ItemTaxType" => 1,
-            "Comment" => "This is Pay2Go E-Ticket Api test"
+            "Comment" => "This is Pay2Go E-Ticket Api test3"
         ];
 
 
@@ -55,9 +57,26 @@ Class Pay2GoInvoice extends CI_Controller
         ];
 
 
+        $post_query_invoice = [
+        "RespondType" => 'JSON',
+            "Version" => '1.1',
+            "TimeStamp" => time(),
+            "SearchType" => '0',
+            "MerchantOrderNo" => 'M0003',
+            "TotalAmt" => 500,
+            "InvoiceNumber" => 'ZR00000003',
+            "RandomNum" => '8204',
+            "DisplayFlag" => '0'
+            
+        ];
 
+
+        //Create Invoice
         //$this->postReq($post_create_invoice, 'https://cinv.pay2go.com/API/invoice_issue');
-        $this->postReq($post_delete_invoice, 'https://cinv.pay2go.com/API/invoice_invalid');
+        //Invalid Invoice
+        //$this->postReq($post_delete_invoice, 'https://cinv.pay2go.com/API/invoice_invalid');
+        //Query Invoice
+        $this->postReq($post_query_invoice, 'https://cinv.pay2go.com/API/invoice_search');
     }
 
     //encrypt the post data.
