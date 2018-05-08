@@ -1,7 +1,7 @@
 
 <html>
     <head>
-        <title>CodeIgniter Test</title>        
+        <title>This is test</title>        
     </head>    
 
     <body>

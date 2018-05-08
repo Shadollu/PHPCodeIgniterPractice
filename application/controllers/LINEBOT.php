@@ -26,6 +26,10 @@ Class LineBot extends CI_Controller
                 [
                     "type" => "text",
                     "text" => $message->{"text"}
+                ],
+                [
+                    "type" => "text",
+                    "text" => "G"
                 ]
             ]
         ];
