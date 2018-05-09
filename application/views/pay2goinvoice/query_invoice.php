@@ -4,7 +4,7 @@
 
         <?php echo validation_errors(); ?>
 
-        <?php echo form_open('Pay2GoInvoice/query_invoice'); ?>
+        <?php echo form_open('Pay2GoInvoice/get_data/query_invoice'); ?>
 
 
         <h5>RespondType</h5>

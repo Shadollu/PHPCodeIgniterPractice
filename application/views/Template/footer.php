@@ -3,6 +3,6 @@
     <hr/>
 
     <div class="w3-panel w3-flat-turquoise">
-        <p>This is footer by Allen</p>
+        <p>This is footer</p>
     </div>
 </footer> 

@@ -11,77 +11,35 @@ Class Pay2GoInvoice extends CI_Controller
         parent::__construct();
     }
 
-    public function issue_invoice()
-    {
-
+    public function get_data($page) {
         $get_post_value = ["TimeStamp" => time()];
 
         //$this->input->post(NULL,TRUE) 會返回所有post的資料
         $get_array = $this->input->post(NULL, TRUE);
 
         $final_data = array_merge($get_post_value, $get_array);
+        $api_url = '';
+        switch ($page) {
+            case "issue_invoice":
+                $api_url = 'https://cinv.pay2go.com/API/invoice_issue';
+                break;
+            case 'touch_invoice':
+                $api_url = 'https://cinv.pay2go.com/API/invoice_touch_issue';
+                break;
+            case 'delete_invoice':
+                $api_url = 'https://cinv.pay2go.com/API/invoice_invalid';
+                break;
+            case 'discount_invoice':
+                $api_url = 'https://cinv.pay2go.com/API/allowance_issue';
+                break;
+            case 'query_invoice':
+                $api_url = 'https://cinv.pay2go.com/API/invoice_search';
+                break;
+            default:
+                break;
+        }
 
-        //Create Invoice, if status = 1, the api will issue the invoice 
-        //immediately; Otherwise, server will hold the invoice data until get 
-        //another invoice touch request.
-
-        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_issue');
-    }
-
-    public function touch_invoice()
-    {
-
-        $get_post_value = ["TimeStamp" => time()];
-
-        //$this->input->post(NULL,TRUE) 會返回所有post的資料
-        $get_array = $this->input->post(NULL, TRUE);
-
-        $final_data = array_merge($get_post_value, $get_array);
-
-        //touch Create Invoice that server have stack invoice file.
-        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_touch_issue');
-    }
-
-    public function delete_invoice()
-    {
-
-        $get_post_value = ["TimeStamp" => time()];
-
-        //$this->input->post(NULL,TRUE) 會返回所有post的資料
-        $get_array = $this->input->post(NULL, TRUE);
-
-        $final_data = array_merge($get_post_value, $get_array);
-
-        ////Invalid Invoice
-        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_invalid');
-    }
-
-    public function discount_invoice()
-    {
-
-        $get_post_value = ["TimeStamp" => time()];
-
-        //$this->input->post(NULL,TRUE) 會返回所有post的資料
-        $get_array = $this->input->post(NULL, TRUE);
-
-        $final_data = array_merge($get_post_value, $get_array);
-
-        //Invoice Get Discount
-        $this->postReq($final_data, 'https://cinv.pay2go.com/API/allowance_issue');
-    }
-
-    public function query_invoice()
-    {
-
-        $get_post_value = ["TimeStamp" => time()];
-
-        //$this->input->post(NULL,TRUE) 會返回所有post的資料
-        $get_array = $this->input->post(NULL, TRUE);
-
-        $final_data = array_merge($get_post_value, $get_array);
-
-        ////Query Invoice
-        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_search');
+        $this->postReq($final_data, $api_url);
     }
 
     //encrypt the post data.
