@@ -1,164 +1,87 @@
 <?php
 
+//HashKey = BvaotUvHl1a0FoXSxe6u17S5yal1mVqO
+//HashIV = r5N3p2Yjnw7UuEes
+//A = 07628153,Allenlu,I + 44
 Class Pay2GoInvoice extends CI_Controller
 {
 
-    //HashKey = BvaotUvHl1a0FoXSxe6u17S5yal1mVqO
-    //HashIV = r5N3p2Yjnw7UuEes
-    //A = 07628153,Allenlu,I + 44
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-    public function index()
+    public function issue_invoice()
     {
 
-        $post_create_invoice = [
-            "RespondType" => 'JSON',
-            "Version" => '1.4',
-            "TimeStamp" => time(),
-            //"TransNum",
-            "MerchantOrderNo" => 'M0006',
-            "Status" => '1',
-            //CreateStatusTime,
-            "Category" => 'B2C',
-            "BuyerName" => 'Allen touch test',
-            //"BuyerUBN" => 25113939,
-            "BuyerAddress" => 'Nangang Distinct, Taipei, Taiwan',
-            //"BuyerEmail", => 'allen.lu@neweb.com.tw',
-            //"CarrierType",
-            //"CarrierNum",
-            //"LoveCode",
-            "PrintFlag" => 'Y',
-            "TaxType" => '1',
-            "TaxRate" => 5,
-            //CustomerClearance,
-            "Amt" => 490,
-            //AmtSales,
-            //AmtZero,
-            //AmtFree,
-            "TaxAmt" => 10,
-            "TotalAmt" => 500,
-            "ItemName" => 'milk',
-            "ItemCount" => 1,
-            "ItemUnit" => 'piece',
-            "ItemPrice" => 500,
-            "ItemAmt" => 500,
-            "ItemTaxType" => 1,
-            "Comment" => "Touch Test"
-        ];
+        $get_post_value = ["TimeStamp" => time()];
 
-        //step 1.create invoice, status must be '0', its mean that invoice 
-        //is ready to issue. platform just saves stack file.
-        //step 2. touch the stack file, then issue the invoice.
-        $post_create_invoice_touch = [
-            "RespondType" => 'JSON',
-            "Version" => '1.0',
-            "TimeStamp" => time(),
-            //TransNum,
-            "InvoiceTransNo" => '18050811232477700',
-            "MerchantOrderNo" => 'M0005',
-            "TotalAmt" => 500
-        ];
+        //$this->input->post(NULL,TRUE) 會返回所有post的資料
+        $get_array = $this->input->post(NULL, TRUE);
 
-
-
-        $post_delete_invoice = [
-            "RespondType" => 'JSON',
-            "Version" => '1.0',
-            "TimeStamp" => time(),
-            "InvoiceNumber" => 'ZR00000001',
-            "InvalidReason" => 'Invalid test',
-        ];
-
-        $post_discount_invoice = [
-            "RespondType" => 'JSON',
-            "Version" => '1.3',
-            "TimeStamp" => time(),
-            "InvoiceNo" => 'ZR00000002',
-            "MerchantOrderNo" => 'M0002',
-            "ItemName" => 'TESTITEM1',
-            "ItemCount" => 1,
-            "ItemUnit" => 'piece',
-            "ItemPrice" => 500,
-            "ItemAmt" => 500,
-            "TaxTypeForMixed" => 1,
-            "ItemTaxAmt" => 0,
-            "TotalAmt" => 500,
-            "Status" => 1
-        ];
-
-
-
-
-        $post_query_invoice = [
-            "RespondType" => 'JSON',
-            "Version" => '1.1',
-            "TimeStamp" => time(),
-            "SearchType" => '0',
-            "MerchantOrderNo" => 'M0003',
-            "TotalAmt" => 500,
-            "InvoiceNumber" => 'ZR00000003',
-            "RandomNum" => '8204',
-            "DisplayFlag" => '0'
-        ];
-
+        $final_data = array_merge($get_post_value, $get_array);
 
         //Create Invoice, if status = 1, the api will issue the invoice 
         //immediately; Otherwise, server will hold the invoice data until get 
         //another invoice touch request.
-        //$this->postReq($post_create_invoice, 'https://cinv.pay2go.com/API/invoice_issue');
-        //
-        //touch Create Invoice that server have stack invoice file.
-        // $this->postReq($post_create_invoice_touch, 'https://cinv.pay2go.com/API/invoice_touch_issue');
-        // 
-        ////Invalid Invoice
-        //$this->postReq($post_delete_invoice, 'https://cinv.pay2go.com/API/invoice_invalid');
-        //
-        //Invoice Get Discount
-        //$this->postReq($post_discount_invoice, 'https://cinv.pay2go.com/API/allowance_issue');
-        //
-        ////Query Invoice
-        $this->postReq($post_query_invoice, 'https://cinv.pay2go.com/API/invoice_search');
+
+        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_issue');
     }
 
-    public function postdata()
+    public function touch_invoice()
     {
 
-        $post_create_invoice = [
-            "RespondType" => $this->input->post('RespondType'),
-            "Version" => $this->input->post('Version'),
-            "TimeStamp" => time(),
-            //"TransNum",
-            "MerchantOrderNo" => $this->input->post('MerchantOrderNo'),
-            "Status" => $this->input->post('Status'),
-            //CreateStatusTime,
-            "Category" => $this->input->post('Category'),
-            "BuyerName" => $this->input->post('BuyerName'),
-            //"BuyerUBN" => 25113939,
-            "BuyerAddress" => $this->input->post('BuyerAddress'),
-            //"BuyerEmail", => 'allen.lu@neweb.com.tw',
-            //"CarrierType",
-            //"CarrierNum",
-            //"LoveCode",
-            "PrintFlag" => $this->input->post('PrintFlag'),
-            "TaxType" => $this->input->post('TaxType'),
-            "TaxRate" => $this->input->post('TaxRate'),
-            //CustomerClearance,
-            "Amt" => $this->input->post('Amt'),
-            //AmtSales,
-            //AmtZero,
-            //AmtFree,
-            "TaxAmt" => $this->input->post('TaxAmt'),
-            "TotalAmt" => $this->input->post('TotalAmt'),
-            "ItemName" => $this->input->post('ItemName'),
-            "ItemCount" => $this->input->post('ItemCount'),
-            "ItemUnit" => $this->input->post('ItemUnit'),
-            "ItemPrice" => $this->input->post('ItemPrice'),
-            "ItemAmt" => $this->input->post('ItemAmt'),
-            "ItemTaxType" => $this->input->post('ItemTaxType'),
-            "Comment" => $this->input->post('Comment')
-        ];
+        $get_post_value = ["TimeStamp" => time()];
 
+        //$this->input->post(NULL,TRUE) 會返回所有post的資料
+        $get_array = $this->input->post(NULL, TRUE);
 
-        $this->postReq($post_create_invoice, 'https://cinv.pay2go.com/API/invoice_issue');
+        $final_data = array_merge($get_post_value, $get_array);
+
+        //touch Create Invoice that server have stack invoice file.
+        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_touch_issue');
+    }
+
+    public function delete_invoice()
+    {
+
+        $get_post_value = ["TimeStamp" => time()];
+
+        //$this->input->post(NULL,TRUE) 會返回所有post的資料
+        $get_array = $this->input->post(NULL, TRUE);
+
+        $final_data = array_merge($get_post_value, $get_array);
+
+        ////Invalid Invoice
+        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_invalid');
+    }
+
+    public function discount_invoice()
+    {
+
+        $get_post_value = ["TimeStamp" => time()];
+
+        //$this->input->post(NULL,TRUE) 會返回所有post的資料
+        $get_array = $this->input->post(NULL, TRUE);
+
+        $final_data = array_merge($get_post_value, $get_array);
+
+        //Invoice Get Discount
+        $this->postReq($final_data, 'https://cinv.pay2go.com/API/allowance_issue');
+    }
+
+    public function query_invoice()
+    {
+
+        $get_post_value = ["TimeStamp" => time()];
+
+        //$this->input->post(NULL,TRUE) 會返回所有post的資料
+        $get_array = $this->input->post(NULL, TRUE);
+
+        $final_data = array_merge($get_post_value, $get_array);
+
+        ////Query Invoice
+        $this->postReq($final_data, 'https://cinv.pay2go.com/API/invoice_search');
     }
 
     //encrypt the post data.
@@ -225,13 +148,29 @@ Class Pay2GoInvoice extends CI_Controller
         $transaction_data_str = http_build_query($transaction_data_array);
         $result = $this->curl_work($postUrl, $transaction_data_str);
 
+        $jsonobj = json_decode($result['web_info']);
 
-        print_r($result["web_info"]);
+        $jobj_status = $jsonobj->{'Status'};
+        $jobj_message = $jsonobj->{'Message'};
+        $jobj_Result = $jsonobj->{'Result'};
+
+        $data['title'] = "執行結果";
+        $data['status'] = $jobj_status;
+        $data['message'] = $jobj_message;
+        $data['result'] = json_decode($jobj_Result);
+
+        $this->load->helper('form');
+        $this->load->helper('url');
+
+        $this->load->view('template/header', $data);
+        $this->load->view('pay2goinvoice/result');
+        $this->load->view('template/footer');
     }
 
-    public function view($page = 'index')
+    public function index($page = 'index')
     {
         $this->load->helper('form');
+        $this->load->helper('url');
 
         if (!file_exists(APPPATH . 'views/pay2goinvoice/' . $page . '.php')) {
             // Whoops, we don't have a page for that!
@@ -239,7 +178,7 @@ Class Pay2GoInvoice extends CI_Controller
         }
 
 
-        $data['title'] = "this is eInvoice test";
+        $data['title'] = "This is e-Invoice Test";
 
         $this->load->view('template/header', $data);
         $this->load->view('pay2goinvoice/' . $page);

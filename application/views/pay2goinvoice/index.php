@@ -1,80 +1,33 @@
 <html>
-    <head>
-        <title>My Form</title>
-    </head>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <body>
 
-        <?php echo validation_errors(); ?>
+        <div class="w3-container">
 
-        <?php echo form_open('Pay2GoInvoice/postdata'); ?>
-
-        <h5>RespondType</h5>
-        <input type="text" name="RespondType" value="JSON" size="50" />
-
-        <h5>Version</h5>
-        <input type="text" name="Version" value="1.4" size="50" />
-
-        <h5>MerchantOrderNo</h5>
-        <input type="text" name="MerchantOrderNo" value="" size="50" />
-
-        <h5>Status:if you wanna issue invoice immediately,set status = 1. 
-            otherwise, this invoice data will stacking in server 
-            until you send invoice touch request.</h5>
-        <input type="text" name="Status" value="" size="50" />
-
-        <h5>Category, B2B or B2C,Default B2C</h5>
-        <input type="text" name="Category" value="B2C" size="50" />
-
-        <h5>BuyerName, Name, that's it</h5>
-        <input type="text" name="BuyerName" value="" size="50" />
-
-        <h5>BuyerAddress,where you live</h5>
-        <input type="text" name="BuyerAddress" value="" size="50" />
-
-        <h5>PrintFlag</h5>
-        <input type="text" name="PrintFlag" value="Y" size="50" />
+            <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
+                <p><?php echo anchor('pay2goinvoice/index/issue_invoice', '建立發票', '建立發票') ?></p>
+                <!--<p><a href="index.php/pay2goinvoice/index/issue_invoice">建立發票</a></p>-->
+            </div>
+            <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
+                <p><?php echo anchor('pay2goinvoice/index/touch_invoice', '觸發建立發票', '觸發建立發票') ?></p>
+                <!--<p><a href="index.php/pay2goinvoice/index/touch_invoice">觸發建立發票</a></p>-->
+            </div>
+            <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
+                <p><?php echo anchor('pay2goinvoice/index/invalid_invoice', '作廢發票', '作廢發票') ?></p>
+                <!--<p><a href="index.php/pay2goinvoice/index/invalid_invoice">作廢發票</a></p>-->
+            </div>
+            <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
+                <p><?php echo anchor('pay2goinvoice/index/discount_invoice', '發票折讓', '發票折讓') ?></p>
+               <!--<p><a href="index.php/pay2goinvoice/index/discount_invoice">發票折讓</a></p>-->
+            </div>
+            <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
+                <p><?php echo anchor('pay2goinvoice/index/query_invoice', '查詢發票', '查詢發票') ?></p>
+                <!--<p><a href="index.php/pay2goinvoice/index/query_invoice">查詢發票</a></p>-->
+            </div>
 
 
-        <h5>TaxType</h5>
-        <input type="text" name="TaxType" value="1" size="50" />
+        </div>
 
-        <h5>TaxRate</h5>
-        <input type="text" name="TaxRate" value="5" size="50" />
-
-        <h5>Amt</h5>
-        <input type="text" name="Amt" value="490" size="50" />
-
-        <h5>TaxAmt</h5>
-        <input type="text" name="TaxAmt" value="10" size="50" />
-
-        <h5>TotalAmt</h5>
-        <input type="text" name="TotalAmt" value="500" size="50" />
-
-        <h5>ItemName</h5>
-        <input type="text" name="ItemName" value="" size="50" />
-
-        <h5>ItemUnit, piece? chuck? cup? ...etc</h5>
-        <input type="text" name="ItemUnit" value="" size="50" />
-
-
-        <h5>ItemCount, how many?</h5>
-        <input type="text" name="ItemCount" value="" size="50" />     
-
-        <h5>ItemPrice</h5>
-        <input type="text" name="ItemPrice" value="500" size="50" />
-
-        <h5>ItemAmt</h5>
-        <input type="text" name="ItemAmt" value="500" size="50" />
-
-        <h5>ItemTaxType</h5>
-        <input type="text" name="ItemTaxType" value="1" size="50" />
-
-        <h5>Comment</h5>
-        <input type="text" name="Comment" value="" size="50" />
-
-        <div><input type="submit" value="Submit" /></div>
-
-    </form>
-
-</body>
+    </body>
 </html>
