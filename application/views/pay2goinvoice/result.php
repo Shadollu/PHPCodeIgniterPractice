@@ -11,7 +11,7 @@
             </div>
             <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
                 <?php foreach ($result as $key => $value): ?>
-                    <p><?php echo $key . " : " . $value ?></p>
+                <div class="w3-left-align"><p><?php echo $key . " : <b>" . $value .'</b>' ?>  </p></div>
                 <?php endforeach; ?>
             </div>
         </div>

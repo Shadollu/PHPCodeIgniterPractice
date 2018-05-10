@@ -11,13 +11,13 @@ Class Pay2GoInvoice extends CI_Controller
         parent::__construct();
     }
 
-    public function get_data($page) {
-        $get_post_value = ["TimeStamp" => time()];
-
+    //get data from page, using CI's $this->input->post(NULL,TRUE) to get data array.
+    public function get_data($page)
+    {
         //$this->input->post(NULL,TRUE) 會返回所有post的資料
         $get_array = $this->input->post(NULL, TRUE);
+        $get_array['TimeStamp'] = time();
 
-        $final_data = array_merge($get_post_value, $get_array);
         $api_url = '';
         switch ($page) {
             case "issue_invoice":
@@ -39,10 +39,9 @@ Class Pay2GoInvoice extends CI_Controller
                 break;
         }
 
-        $this->postReq($final_data, $api_url);
+        $this->postReq($get_array, $api_url);
     }
 
-    //encrypt the post data.
     function addpadding($string, $blocksize = 32)
     {
         $len = strlen($string);
@@ -85,6 +84,7 @@ Class Pay2GoInvoice extends CI_Controller
         return $return_info;
     }
 
+    //encrypt the post data, post it to Pay2go server.
     function postReq($post_data_array, $postUrl)
     {
         $post_data_str = http_build_query($post_data_array);
@@ -106,6 +106,8 @@ Class Pay2GoInvoice extends CI_Controller
         $transaction_data_str = http_build_query($transaction_data_array);
         $result = $this->curl_work($postUrl, $transaction_data_str);
 
+
+
         $jsonobj = json_decode($result['web_info']);
 
         $jobj_status = $jsonobj->{'Status'};
@@ -115,16 +117,38 @@ Class Pay2GoInvoice extends CI_Controller
         $data['title'] = "執行結果";
         $data['status'] = $jobj_status;
         $data['message'] = $jobj_message;
-        $data['result'] = json_decode($jobj_Result);
+
+        if ($jobj_Result != null) {
+            $data['result'] = json_decode($jobj_Result);
+        } else {
+            $data['result'] = ['執行結果' => 'NULL'];
+        }
 
         $this->load->helper('form');
         $this->load->helper('url');
 
+        //==============================================
+        $this->load->database();
+        date_default_timezone_set('Asia/Taipei');
+        
+        $datetime = date('Y-m-d/H:i:s');
+        
+        $db_data = array(
+            'logtime' => $datetime,
+            'result' =>$data['result']->{'MerchantID'},
+            'result_status'=> $data['status'],
+            'message' => $data['message'],
+        );
+        
+        $this->db->insert('log',$db_data);
+        //==============================================
+        
         $this->load->view('template/header', $data);
         $this->load->view('pay2goinvoice/result');
         $this->load->view('template/footer');
     }
 
+    //detect view
     public function index($page = 'index')
     {
         $this->load->helper('form');
