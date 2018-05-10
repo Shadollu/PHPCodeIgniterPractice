@@ -4,24 +4,29 @@
 
         <?php echo validation_errors(); ?>
 
-        <?php echo form_open('Pay2GoInvoice/get_data/delete_invoice'); ?>
 
+        <div class="w3-container">
+            <?php echo form_open('Pay2GoInvoice/get_data/delete_invoice'); ?>
 
-        <h5>RespondType</h5>
-        <input type="text" name="RespondType" value="JSON" size="50" />
+            <label class="w3-text-green">RespondType</label>
+            <input class= "w3-input" type="text" name="RespondType" value="JSON" size="50" />
+            <br/>
 
-        <h5>Version</h5>
-        <input type="text" name="Version" value="1.0" size="50" />
+            <label class="w3-text-green">Version</label>
+            <input class= "w3-input" type="text" name="Version" value="1.0" size="50" />
+            <br/>
 
-        <h5>InvoiceNumber, Invoice Number</h5>
-        <input type="text" name="InvoiceNumber" value="" size="10" />
+            <label class="w3-text-green">InvoiceNumber, Invoice Number</label>
+            <input class= "w3-input" type="text" name="InvoiceNumber" value="" size="10" />
+            <br/>
 
-        <h5>InvalidReason</h5>
-        <input type="text" name="InvalidReason" value="" size="50" />
+            <label class="w3-text-green">InvalidReason</label>
+            <input class= "w3-input" type="text" name="InvalidReason" value="" size="50" />
+            <br/>
 
-        <div><input type="submit" value="Submit" /></div>
+            <div><input type="submit" class="w3-button w3-teal" value="Submit" /></div>
 
-    </form>
+        </div>
 
-</body>
+    </body>
 </html>
