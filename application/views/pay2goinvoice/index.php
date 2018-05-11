@@ -25,7 +25,10 @@
                 <p><?php echo anchor('pay2goinvoice/index/query_invoice', '查詢發票', '查詢發票') ?></p>
                 <!--<p><a href="index.php/pay2goinvoice/index/query_invoice">查詢發票</a></p>-->
             </div>
-
+            <div class="w3-panel w3-border w3-border-red w3-hover-border-green">
+                <p><?php echo anchor('pay2goinvoice/index/query_db', '查詢資料庫', '查詢資料庫') ?></p>
+                <!--<p><a href="index.php/pay2goinvoice/index/query_invoice">查詢發票</a></p>-->
+            </div>
 
         </div>
 

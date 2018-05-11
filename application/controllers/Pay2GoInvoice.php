@@ -42,7 +42,7 @@ Class Pay2GoInvoice extends CI_Controller
         $this->postReq($get_array, $api_url);
     }
 
-    function addpadding($string, $blocksize = 32)
+    private function addpadding($string, $blocksize = 32)
     {
         $len = strlen($string);
         $pad = $blocksize - ($len % $blocksize);
@@ -51,19 +51,12 @@ Class Pay2GoInvoice extends CI_Controller
     }
 
     //excute the invoice Data. using curl
-    function curl_work($url = "", $parameter = "")
+    private function curl_work($url = "", $parameter = "")
     {
         $curl_options = array(
-            CURLOPT_URL => $url,
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => "Google Bot",
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_SSL_VERIFYPEER => FALSE,
-            CURLOPT_SSL_VERIFYHOST => FALSE,
-            CURLOPT_POST => "1",
-            CURLOPT_POSTFIELDS => $parameter
-        );
+            CURLOPT_URL => $url, CURLOPT_HEADER => false, CURLOPT_RETURNTRANSFER => true, CURLOPT_USERAGENT => "Google Bot",
+            CURLOPT_FOLLOWLOCATION => true, CURLOPT_SSL_VERIFYPEER => FALSE, CURLOPT_SSL_VERIFYHOST => FALSE,
+            CURLOPT_POST => "1", CURLOPT_POSTFIELDS => $parameter);
 
         $ch = curl_init();
 
@@ -84,8 +77,47 @@ Class Pay2GoInvoice extends CI_Controller
         return $return_info;
     }
 
-    //encrypt the post data, post it to Pay2go server.
-    function postReq($post_data_array, $postUrl)
+    private function save_db($data)
+    {
+        $this->load->database();
+        date_default_timezone_set('Asia/Taipei');
+        $datetime = date('Y-m-d');
+
+        $db_data = array(
+            'logtime' => $datetime,
+            'result' => json_encode($data['result']),
+            'result_status' => $data['status'],
+            'message' => $data['message'],
+        );
+
+        $this->db->insert('log', $db_data);
+    }
+
+    public function query_db()
+    {
+        $this->load->database();
+        $getdata = $this->input->post(NULL, TRUE);
+
+        $sql = "select * from log where logtime LIKE '%" . $this->db->escape_like_str($getdata['logtime']) . "%'  ";
+
+        $query = $this->db->query($sql);
+
+        if ($query->num_rows()>0) {
+            $data['result'] = $query->row_array();
+        }
+        else{
+            $data['result'] = ['logtime' => 'none','result_status' => 'none','message'=>'none'];
+        }
+        
+        $data['title'] = 'This is DB query result';
+        $data['row_count'] = $query->num_rows();
+        $this->index('query_db_result', $data);
+        
+
+    }
+
+    //encrypt the post data, post it to server.
+    private function postReq($post_data_array, $postUrl)
     {
         $post_data_str = http_build_query($post_data_array);
         $Key = 'BvaotUvHl1a0FoXSxe6u17S5yal1mVqO';
@@ -95,7 +127,6 @@ Class Pay2GoInvoice extends CI_Controller
         $postData = trim(bin2hex(openssl_encrypt(
                     $this->addpadding($post_data_str), 'AES-256-CBC', $Key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv)));
 
-
         $MerchantID = '31027295';
 
         $transaction_data_array = array(
@@ -104,52 +135,28 @@ Class Pay2GoInvoice extends CI_Controller
         );
 
         $transaction_data_str = http_build_query($transaction_data_array);
+
+        //get response data from server.
         $result = $this->curl_work($postUrl, $transaction_data_str);
-
-
 
         $jsonobj = json_decode($result['web_info']);
 
-        $jobj_status = $jsonobj->{'Status'};
-        $jobj_message = $jsonobj->{'Message'};
-        $jobj_Result = $jsonobj->{'Result'};
-
         $data['title'] = "執行結果";
-        $data['status'] = $jobj_status;
-        $data['message'] = $jobj_message;
+        $data['status'] = $jsonobj->{'Status'};
+        $data['message'] = $jsonobj->{'Message'};
 
-        if ($jobj_Result != null) {
-            $data['result'] = json_decode($jobj_Result);
+        if ($jsonobj->{'Result'} != null) {
+            $data['result'] = json_decode($jsonobj->{'Result'});
         } else {
-            $data['result'] = ['執行結果' => 'NULL'];
+            $data['result'] = ['查詢結果' => 'NULL'];
         }
 
-        $this->load->helper('form');
-        $this->load->helper('url');
-
-        //==============================================
-        $this->load->database();
-        date_default_timezone_set('Asia/Taipei');
-        
-        $datetime = date('Y-m-d/H:i:s');
-        
-        $db_data = array(
-            'logtime' => $datetime,
-            'result' =>$data['result']->{'MerchantID'},
-            'result_status'=> $data['status'],
-            'message' => $data['message'],
-        );
-        
-        $this->db->insert('log',$db_data);
-        //==============================================
-        
-        $this->load->view('template/header', $data);
-        $this->load->view('pay2goinvoice/result');
-        $this->load->view('template/footer');
+        $this->save_db($data);
+        $this->index('result', $data);
     }
 
     //detect view
-    public function index($page = 'index')
+    public function index($page = 'index', $data = NULL)
     {
         $this->load->helper('form');
         $this->load->helper('url');
@@ -159,8 +166,9 @@ Class Pay2GoInvoice extends CI_Controller
             show_404();
         }
 
-
-        $data['title'] = "This is e-Invoice Test";
+        if ($data == NULL) {
+            $data['title'] = "This is e-Invoice Test";
+        }
 
         $this->load->view('template/header', $data);
         $this->load->view('pay2goinvoice/' . $page);

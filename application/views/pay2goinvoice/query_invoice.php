@@ -8,7 +8,8 @@
 
             <?php echo form_open('Pay2GoInvoice/get_data/query_invoice'); ?>
 
-
+            
+            
             <label class="w3-text-green">RespondType</label>
             <input class= "w3-input" type="text" name="RespondType" value="JSON" size="50" />
             <br/>
