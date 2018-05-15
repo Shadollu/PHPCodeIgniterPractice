@@ -25,12 +25,12 @@ Class LineBot extends CI_Controller
             "messages" => [
                 [
                     "type" => "text",
-                    "text" => $message->{"text"}
+                    "text" => $jsonString
                 ]
             ]
         ];
 
-         //post url init
+        //post url init
         $ch = curl_init("https://api.line.me/v2/bot/message/reply");
 
         curl_setopt($ch, CURLOPT_POST, true);
@@ -48,4 +48,6 @@ Class LineBot extends CI_Controller
         curl_exec($ch);
         curl_close($ch);
     }
+    
+   
 }

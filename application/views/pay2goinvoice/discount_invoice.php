@@ -41,7 +41,7 @@
             <input class= "w3-input" type="text" name="ItemPrice" value="" size="50" />
             <br/>
 
-            <label class="w3-text-green"ItemAmt</label>
+            <label class="w3-text-green">ItemAmt</label>
             <input class= "w3-input" type="text" name="ItemAmt" value="" size="50" />
             <br/>
 
@@ -57,7 +57,7 @@
             <input class= "w3-input" type="text" name="TotalAmt" value="" size="50" />
             <br/>
 
-            <label class="w3-text-green"Status</label>
+            <label class="w3-text-green">Status</label>
             <input class= "w3-input" type="text" name="Status" value="" size="50" />
             <br/>
 

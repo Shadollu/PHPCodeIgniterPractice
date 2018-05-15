@@ -21,10 +21,10 @@
 
 
         <p>日期: <input class= "w3-input" type="text" id="logtime" name='logtime' value=''></p>
-
+<!--
         <p>status: <input class= "w3-input" type="text" name="result_status" value=''></p>       
 
-        <p>回傳訊息: <input class= "w3-input" type="text" name="message" value=''></p>
+        <p>回傳訊息: <input class= "w3-input" type="text" name="message" value=''></p>-->
 
         <br/>
 

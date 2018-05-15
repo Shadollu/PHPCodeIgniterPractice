@@ -9,6 +9,7 @@ Class Pay2GoInvoice extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('db_model');
     }
 
     //get data from page, using CI's $this->input->post(NULL,TRUE) to get data array.
@@ -17,8 +18,8 @@ Class Pay2GoInvoice extends CI_Controller
         //$this->input->post(NULL,TRUE) 會返回所有post的資料
         $get_array = $this->input->post(NULL, TRUE);
         $get_array['TimeStamp'] = time();
-
         $api_url = '';
+
         switch ($page) {
             case "issue_invoice":
                 $api_url = 'https://cinv.pay2go.com/API/invoice_issue';
@@ -38,7 +39,6 @@ Class Pay2GoInvoice extends CI_Controller
             default:
                 break;
         }
-
         $this->postReq($get_array, $api_url);
     }
 
@@ -77,43 +77,10 @@ Class Pay2GoInvoice extends CI_Controller
         return $return_info;
     }
 
-    private function save_db($data)
-    {
-        $this->load->database();
-        date_default_timezone_set('Asia/Taipei');
-        $datetime = date('Y-m-d');
-
-        $db_data = array(
-            'logtime' => $datetime,
-            'result' => json_encode($data['result']),
-            'result_status' => $data['status'],
-            'message' => $data['message'],
-        );
-
-        $this->db->insert('log', $db_data);
-    }
-
     public function query_db()
     {
-        $this->load->database();
         $getdata = $this->input->post(NULL, TRUE);
-
-        $sql = "select * from log where logtime LIKE '%" . $this->db->escape_like_str($getdata['logtime']) . "%'  ";
-
-        $query = $this->db->query($sql);
-
-        if ($query->num_rows()>0) {
-            $data['result'] = $query->row_array();
-        }
-        else{
-            $data['result'] = ['logtime' => 'none','result_status' => 'none','message'=>'none'];
-        }
-        
-        $data['title'] = 'This is DB query result';
-        $data['row_count'] = $query->num_rows();
-        $this->index('query_db_result', $data);
-        
-
+        $this->index('query_db_result', $this->db_model->query_db($getdata));
     }
 
     //encrypt the post data, post it to server.
@@ -151,7 +118,7 @@ Class Pay2GoInvoice extends CI_Controller
             $data['result'] = ['查詢結果' => 'NULL'];
         }
 
-        $this->save_db($data);
+        $this->db_model->save_db($data);
         $this->index('result', $data);
     }
 
