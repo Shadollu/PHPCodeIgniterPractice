@@ -10,6 +10,8 @@ Class Pay2GoInvoice extends CI_Controller
     {
         parent::__construct();
         $this->load->model('db_model');
+        $this->load->model('encrypt_data');
+        $this->load->model('Linebot_model');
     }
 
     //get data from page, using CI's $this->input->post(NULL,TRUE) to get data array.
@@ -39,72 +41,40 @@ Class Pay2GoInvoice extends CI_Controller
             default:
                 break;
         }
-        $this->postReq($get_array, $api_url);
+
+        $return_data = $this->encrypt_data->postReq($get_array, $api_url);
+        $this->index('result', $return_data);
+
+        $this->db_model->insert_db($return_data);
+
+        $this->Linebot_model->send_msg("U6ff789d36d6f22b7484a0ad6d8b32d5d", $return_data);
     }
 
-    private function addpadding($string, $blocksize = 32)
+    public function query_db($pagedata)
     {
-        $len = strlen($string);
-        $pad = $blocksize - ($len % $blocksize);
-        $string .= str_repeat(chr($pad), $pad);
-        return $string;
-    }
 
-    //excute the invoice Data. using curl
-    private function curl_work($url = "", $parameter = "")
-    {
-        $curl_options = array(
-            CURLOPT_URL => $url, CURLOPT_HEADER => false, CURLOPT_RETURNTRANSFER => true, CURLOPT_USERAGENT => "Google Bot",
-            CURLOPT_FOLLOWLOCATION => true, CURLOPT_SSL_VERIFYPEER => FALSE, CURLOPT_SSL_VERIFYHOST => FALSE,
-            CURLOPT_POST => "1", CURLOPT_POSTFIELDS => $parameter);
-
-        $ch = curl_init();
-
-        curl_setopt_array($ch, $curl_options);
-        $result = curl_exec($ch);
-        $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curl_error = curl_errno($ch);
-
-        curl_close($ch);
-
-        $return_info = array("url" => $url,
-            "send_parameter" => $parameter,
-            "http_status" => $retcode,
-            "curl_error_no" => $curl_error,
-            "web_info" => $result
-        );
-
-        return $return_info;
-    }
-
-    public function query_db($page)
-    {
         $getdata = $this->input->post(NULL, TRUE);
-        $getdata['page'] = $page;
+        $getdata['page'] = $pagedata;
+
         $query = $this->db_model->query_db($getdata);
 
-
-        if ($page == 'query_db_result') {
+        if ($pagedata == 'query_db_result') {
             $this->index('query_db_result', $query);
         } else {
             $this->index('edit_db', $query);
         }
-
-        //  $this->index('query_db_result', $this->db_model->query_db($getdata['logtime']));
     }
 
-    public function delete_db($id)
-    {
-        $this->db_model->delete_db($id);
-        echo 'delete it! OK!';
-    }
-
-    public function edit_db_save()
+    public function comfirm_edit()
     {
         $data = $this->input->post(NULL, TRUE);
+        $this->load->helper('url');
 
         switch ($data['submit']) {
             case 'edit':
+                //這個元素只在Controller進行辨識,不需要送進model            
+                unset($data['submit']);
+
                 $this->db_model->update_db($data);
                 break;
 
@@ -113,51 +83,17 @@ Class Pay2GoInvoice extends CI_Controller
                 break;
         }
 
-        echo 'edit it! OK!';
-    }
+        echo '<script language="javascript">';
+        echo 'alert("data successfully edit")';
+        echo '</script>';
 
-    //encrypt the post data, post it to server.
-    private function postReq($post_data_array, $postUrl)
-    {
-        $post_data_str = http_build_query($post_data_array);
-        $Key = 'BvaotUvHl1a0FoXSxe6u17S5yal1mVqO';
-        $iv = 'r5N3p2Yjnw7UuEes';
-
-        //encrypt it!
-        $postData = trim(bin2hex(openssl_encrypt(
-                    $this->addpadding($post_data_str), 'AES-256-CBC', $Key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv)));
-
-        $MerchantID = '31027295';
-
-        $transaction_data_array = array(
-            "MerchantID_" => $MerchantID,
-            "PostData_" => $postData
-        );
-
-        $transaction_data_str = http_build_query($transaction_data_array);
-
-        //get response data from server.
-        $result = $this->curl_work($postUrl, $transaction_data_str);
-
-        $jsonobj = json_decode($result['web_info']);
-
-        $data['title'] = "執行結果";
-        $data['status'] = $jsonobj->{'Status'};
-        $data['message'] = $jsonobj->{'Message'};
-
-        if ($jsonobj->{'Result'} != null) {
-            $data['result'] = json_decode($jsonobj->{'Result'});
-        } else {
-            $data['result'] = ['查詢結果' => 'NULL'];
-        }
-
-        $this->db_model->save_db($data);
-        $this->index('result', $data);
+        $this->index('query_db');
     }
 
     //detect view
     public function index($page = 'index', $data = NULL)
     {
+
         $this->load->helper('form');
         $this->load->helper('url');
 

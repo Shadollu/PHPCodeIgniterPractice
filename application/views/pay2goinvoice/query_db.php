@@ -19,16 +19,13 @@
         <?php echo validation_errors(); ?>
         <?php echo form_open('Pay2GoInvoice/query_db/query_db_result'); ?>
 
-
         <p>日期: <input class= "w3-input" type="text" id="logtime" name='logtime' value=''></p>
-<!--
-        <p>status: <input class= "w3-input" type="text" name="result_status" value=''></p>       
 
-        <p>回傳訊息: <input class= "w3-input" type="text" name="message" value=''></p>-->
 
         <br/>
 
-        <div><input type="submit" class="w3-button w3-teal" value="Submit" /></div>
+ 
+        <input type="submit" class="w3-button w3-teal" value="Submit" />
     </body>
 </html>
 

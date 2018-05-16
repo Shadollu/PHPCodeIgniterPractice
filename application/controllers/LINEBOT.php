@@ -48,6 +48,4 @@ Class LineBot extends CI_Controller
         curl_exec($ch);
         curl_close($ch);
     }
-    
-   
 }

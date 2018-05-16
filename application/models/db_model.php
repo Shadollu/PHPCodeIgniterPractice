@@ -9,7 +9,7 @@ class db_model extends CI_Model
     }
 
     //insert data to database
-    public function save_db($data)
+    public function insert_db($data)
     {
         date_default_timezone_set('Asia/Taipei');
         $datetime = date('Y-m-d');
@@ -37,7 +37,7 @@ class db_model extends CI_Model
         if ($querystring['page'] == 'query_db_result') {
             $this->db->like('logtime', $querystring['logtime']);
         } else {
-            $this->db->like('id', $querystring['page']);
+            $this->db->where('id', $querystring['page']);
         }
 
         $query = $this->db->get('log');
@@ -55,7 +55,6 @@ class db_model extends CI_Model
 
     public function update_db($data)
     {
-        $this->db->set($data);
-        $this->db->insert('log');
+        $this->db->where('id', $data['id'])->update('log', $data);
     }
 }
