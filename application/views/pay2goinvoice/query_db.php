@@ -17,7 +17,7 @@
 
     <body>
         <?php echo validation_errors(); ?>
-        <?php echo form_open('Pay2GoInvoice/query_db/'); ?>
+        <?php echo form_open('Pay2GoInvoice/query_db/query_db_result'); ?>
 
 
         <p>日期: <input class= "w3-input" type="text" id="logtime" name='logtime' value=''></p>

@@ -77,10 +77,43 @@ Class Pay2GoInvoice extends CI_Controller
         return $return_info;
     }
 
-    public function query_db()
+    public function query_db($page)
     {
         $getdata = $this->input->post(NULL, TRUE);
-        $this->index('query_db_result', $this->db_model->query_db($getdata));
+        $getdata['page'] = $page;
+        $query = $this->db_model->query_db($getdata);
+
+
+        if ($page == 'query_db_result') {
+            $this->index('query_db_result', $query);
+        } else {
+            $this->index('edit_db', $query);
+        }
+
+        //  $this->index('query_db_result', $this->db_model->query_db($getdata['logtime']));
+    }
+
+    public function delete_db($id)
+    {
+        $this->db_model->delete_db($id);
+        echo 'delete it! OK!';
+    }
+
+    public function edit_db_save()
+    {
+        $data = $this->input->post(NULL, TRUE);
+
+        switch ($data['submit']) {
+            case 'edit':
+                $this->db_model->update_db($data);
+                break;
+
+            case 'delete':
+                $this->db_model->delete_db($data['id']);
+                break;
+        }
+
+        echo 'edit it! OK!';
     }
 
     //encrypt the post data, post it to server.
