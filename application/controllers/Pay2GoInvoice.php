@@ -9,7 +9,7 @@ Class Pay2GoInvoice extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Db_model');
+        //$this->load->model('Db_model');
         $this->load->model('Encrypt_data');
         $this->load->model('Linebot_model');
     }
