@@ -3,13 +3,15 @@
 //HashKey = BvaotUvHl1a0FoXSxe6u17S5yal1mVqO
 //HashIV = r5N3p2Yjnw7UuEes
 //A = 07628153,Allenlu,I + 44
+
+//如果要Push到Heroku ： 1.變更Config的Baseurl,2.把Db_model相關的程式碼先註解調
 Class Pay2GoInvoice extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-        //$this->load->model('Db_model');
+        $this->load->model('Db_model');
         $this->load->model('Encrypt_data');
         $this->load->model('Linebot_model');
     }
@@ -17,7 +19,7 @@ Class Pay2GoInvoice extends CI_Controller
     //get data from page, using CI's $this->input->post(NULL,TRUE) to get data array.
     public function get_data($page)
     {
-        //$this->input->post(NULL,TRUE) 會返回所有post的資料
+        $this->input->post(NULL,TRUE) 會返回所有post的資料
         $get_array = $this->input->post(NULL, TRUE);
         $get_array['TimeStamp'] = time();
         $api_url = '';
