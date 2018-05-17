@@ -105,8 +105,8 @@ Class Pay2GoInvoice extends CI_Controller
             $data['title'] = "This is e-Invoice Test";
         }
 
-        $this->load->view('template/header', $data);
+        $this->load->view('Template/header', $data);
         $this->load->view('pay2goinvoice/' . $page);
-        $this->load->view('template/footer');
+        $this->load->view('Template/footer');
     }
 }
