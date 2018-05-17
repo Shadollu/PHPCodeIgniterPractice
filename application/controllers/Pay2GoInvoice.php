@@ -42,10 +42,10 @@ Class Pay2GoInvoice extends CI_Controller
                 break;
         }
 
-        $return_data = $this->encrypt_data->postReq($get_array, $api_url);
+        $return_data = $this->Encrypt_data->postReq($get_array, $api_url);
         $this->index('result', $return_data);
 
-        $this->db_model->insert_db($return_data);
+        $this->Db_model->insert_db($return_data);
 
         $this->Linebot_model->send_msg("U6ff789d36d6f22b7484a0ad6d8b32d5d", $return_data);
     }

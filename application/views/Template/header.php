@@ -14,7 +14,7 @@
         <div class="w3-panel w3-flat-turquoise">
             <h2><?php echo $title ?></h2>
             <p>This Header using w3.css.</p>
-            <p><?php echo anchor('pay2goinvoice/index/index', 'Go to Index.', '回到Index') ?></p>
+            <p><?php echo anchor('Pay2GoInvoice/index/index', 'Go to Index.', '回到Index') ?></p>
         </div>
 
 
