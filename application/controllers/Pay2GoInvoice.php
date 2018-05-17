@@ -19,7 +19,7 @@ Class Pay2GoInvoice extends CI_Controller
     //get data from page, using CI's $this->input->post(NULL,TRUE) to get data array.
     public function get_data($page)
     {
-        $this->input->post(NULL,TRUE) 會返回所有post的資料
+        //$this->input->post(NULL,TRUE) 會返回所有post的資料
         $get_array = $this->input->post(NULL, TRUE);
         $get_array['TimeStamp'] = time();
         $api_url = '';
