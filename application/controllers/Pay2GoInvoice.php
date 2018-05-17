@@ -10,8 +10,8 @@ Class Pay2GoInvoice extends CI_Controller
     {
         parent::__construct();
 //        $this->load->model('db_model');
-        $this->load->model('encrypt_data');
-        $this->load->model('Linebot_model');
+ //      $this->load->model('encrypt_data');
+  //      $this->load->model('Linebot_model');
     }
 
     //get data from page, using CI's $this->input->post(NULL,TRUE) to get data array.
