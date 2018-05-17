@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 //$config['base_url'] = 'http://localhost:80';
-$config['base_url'] = 'https://pacific-peak-32610.herokuapp.com/';
+$config['base_url'] = 'https://pacific-peak-32610.herokuapp.com/index.php';
 
 
 /*

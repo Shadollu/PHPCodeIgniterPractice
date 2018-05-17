@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 #$route['(:any)'] = 'pages/view/$1';
 #$route['default_controller'] = 'news';
 
-$route['default_controller'] = 'pay2goinvoice/index';
+$route['default_controller'] = 'Pay2GoInvoice/index';
 $route['(:any)'] = 'pay2goinvoice/index/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
