@@ -1,6 +1,6 @@
 <?php
 
-class encrypt_data extends CI_Model
+class Encrypt_data extends CI_Model
 {
 
     private function addpadding($string, $blocksize = 32)

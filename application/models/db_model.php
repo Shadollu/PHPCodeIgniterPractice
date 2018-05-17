@@ -1,6 +1,6 @@
 <?php
 
-class db_model extends CI_Model
+class Db_model extends CI_Model
 {
 
     public function __construct()
