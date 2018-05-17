@@ -68,7 +68,6 @@ Class Pay2GoInvoice extends CI_Controller
     public function comfirm_edit()
     {
         $data = $this->input->post(NULL, TRUE);
-        $this->load->helper('url');
 
         switch ($data['submit']) {
             case 'edit':

@@ -21,7 +21,7 @@ class db_model extends CI_Model
             'message' => $data['message'],
         );
 
-        return $this->db->insert('log', $db_data);
+         $this->db->insert('log', $db_data);
     }
 
     //query data from database
