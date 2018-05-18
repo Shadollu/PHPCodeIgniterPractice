@@ -3,7 +3,6 @@
 //HashKey = BvaotUvHl1a0FoXSxe6u17S5yal1mVqO
 //HashIV = r5N3p2Yjnw7UuEes
 //A = 07628153,Allenlu,I + 44
-
 //如果要Push到Heroku ： 1.變更Config的Baseurl,2.把Db_model相關的程式碼先註解調
 Class Pay2GoInvoice extends CI_Controller
 {
@@ -11,7 +10,7 @@ Class Pay2GoInvoice extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //$this->load->model('Db_model');
+       // $this->load->model('Db_model');
         $this->load->model('Encrypt_data');
         $this->load->model('Linebot_model');
     }
@@ -43,11 +42,12 @@ Class Pay2GoInvoice extends CI_Controller
             default:
                 break;
         }
+        
 
         $return_data = $this->Encrypt_data->postReq($get_array, $api_url);
         $this->index('result', $return_data);
 
-      // $this->Db_model->insert_db($return_data);
+        //$this->Db_model->insert_db($return_data);
 
         $this->Linebot_model->send_msg("U6ff789d36d6f22b7484a0ad6d8b32d5d", $return_data);
     }
@@ -76,11 +76,11 @@ Class Pay2GoInvoice extends CI_Controller
                 //這個元素只在Controller進行辨識,不需要送進model            
                 unset($data['submit']);
 
-                $this->Db_model->update_db($data);
+               // $this->Db_model->update_db($data);
                 break;
 
             case 'delete':
-                $this->Db_model->delete_db($data['id']);
+              //  $this->Db_model->delete_db($data['id']);
                 break;
         }
 
