@@ -10,7 +10,7 @@ Class Pay2GoInvoice extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-       // $this->load->model('Db_model');
+        $this->load->model('Db_model');
         $this->load->model('Encrypt_data');
         $this->load->model('Linebot_model');
     }
@@ -42,12 +42,12 @@ Class Pay2GoInvoice extends CI_Controller
             default:
                 break;
         }
-        
+
 
         $return_data = $this->Encrypt_data->postReq($get_array, $api_url);
         $this->index('result', $return_data);
 
-        //$this->Db_model->insert_db($return_data);
+        $this->Db_model->insert_db($return_data);
 
         $this->Linebot_model->send_msg("U6ff789d36d6f22b7484a0ad6d8b32d5d", $return_data);
     }
@@ -58,7 +58,7 @@ Class Pay2GoInvoice extends CI_Controller
         $getdata = $this->input->post(NULL, TRUE);
         $getdata['page'] = $pagedata;
 
-        //$query = $this->Db_model->query_db($getdata);
+        $query = $this->Db_model->query_db($getdata);
 
         if ($pagedata == 'query_db_result') {
             $this->index('query_db_result', $query);
@@ -76,11 +76,11 @@ Class Pay2GoInvoice extends CI_Controller
                 //這個元素只在Controller進行辨識,不需要送進model            
                 unset($data['submit']);
 
-               // $this->Db_model->update_db($data);
+                $this->Db_model->update_db($data);
                 break;
 
             case 'delete':
-              //  $this->Db_model->delete_db($data['id']);
+                $this->Db_model->delete_db($data['id']);
                 break;
         }
 
